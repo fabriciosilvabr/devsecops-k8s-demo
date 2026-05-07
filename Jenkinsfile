@@ -25,8 +25,8 @@ pipeline {
     stage('Docker Build and Push') {
       steps {
         sh 'printenv'
-        sh 'docker build -t fabriciosilva/numeric-app:$BUILD_NUMBER .'
-        sh 'docker push fabriciosilva/numeric-app:$BUILD_NUMBER'
+        sh 'docker build -t fabriciosilvabr/numeric-app:$BUILD_NUMBER .'
+        sh 'docker push fabriciosilvabr/numeric-app:$BUILD_NUMBER'
       }
     }
   }
