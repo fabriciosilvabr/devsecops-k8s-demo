@@ -2,7 +2,8 @@ pipeline {
   agent any
 
   stages {
-    stage('Build Artifact') {
+
+    stage('Build Artifact - Maven') {
       steps {
         sh "mvn clean package -DskipTests=true"
         archive 'target/*.jar'
@@ -18,6 +19,14 @@ pipeline {
           junit 'target/surefire-reports/*.xml'
           jacoco execPattern: 'target/jacoco.exec'
         }
+      }
+    }
+
+    stage('Docker Build and Push') {
+      steps {
+        sh 'printenv'
+        sh 'docker build -t fabriciosilva/numeric-app:$BUILD_NUMBER .'
+        sh 'docker push fabriciosilva/numeric-app:$BUILD_NUMBER'
       }
     }
   }
