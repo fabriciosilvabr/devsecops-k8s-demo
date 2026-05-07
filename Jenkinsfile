@@ -24,9 +24,10 @@ pipeline {
 
     stage('Docker Build and Push') {
       steps {
-        sh 'printenv'
-        sh 'docker build -t fabriciosilvabr/numeric-app:$BUILD_NUMBER .'
-        sh 'docker push fabriciosilvabr/numeric-app:$BUILD_NUMBER'
+          withDockerRegistry([credentialsId: "docker-hub", url? ""]) {
+          sh 'printenv'
+          sh 'docker build -t fabriciosilvabr/numeric-app:""$GIT_COMMIT"" .'
+          sh 'docker push fabriciosilvabr/numeric-app:""$GIT_COMMIT""'
       }
     }
   }
