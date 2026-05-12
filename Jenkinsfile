@@ -64,8 +64,11 @@ pipeline {
             },
             "Trivy Scan":{
                 sh "bash trivy-docker-image-scan.sh"
-              {
-          )
+            },
+            "OPA Conftest":{
+              sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile --all-namespaces'
+           )
+        }
       }
     }        
     
@@ -78,6 +81,13 @@ pipeline {
         }
       }
     }
+  
+    stage('Vulnerability Scan - Kubernetes') {
+      steps {
+          sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+        }
+      }
+            
     stage('Kubernetes Deployment - DEV') {
       steps {
         withkubeConfig([credentialsId: 'kubeconfig']) {
